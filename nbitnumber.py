@@ -2,36 +2,36 @@
 # print("{0:b}".format(18432))
 
 
-def nextSparse(x):
+def nextsparse(x):
     # Find binary representation of
     # x and store it in bin[].
     # bin[0] contains least significant
     # bit (LSB), next bit is in bin[1],
     # and so on.
-    bin = []
-    while (x != 0):
-        bin.append(x & 1)
+    bin_rep = []
+    while x != 0:
+        bin_rep.append(x & 1)
         x >>= 1
 
     # There my be extra bit in result,
     # so add one extra bit
-    bin.append(0)
-    n = len(bin)  # Size of binary representation
+    bin_rep.append(0)
+    n = len(bin_rep)  # Size of binary representation
 
     # The position till which all
     # bits are finalized
     changes = 0
 
     # Start from second bit (next to LSB)
-    for i in range(0, n - 2):
+    for m in range(0, n - 2):
 
         # If current bit and its previous
         # bit are 1, but next bit is not 1.
-        if bin[i] == 1 and bin[i + 1] != 1:
+        if bin_rep[m] == 1 and bin_rep[m + 1] != 1:
             # Make the next bit 1
-            bin[i + 1] = 1
-            bin[i] = 0
-            changes+=1
+            bin_rep[m + 1] = 1
+            bin_rep[m] = 0
+            changes += 1
             break
 
             # # Make all bits before current
@@ -48,21 +48,20 @@ def nextSparse(x):
     # Find decimal equivalent
     # of modified bin[]
     if changes == 0:
-        bin[n-1]=1
-        bin[n-2]=0
-        bin[n-3]=0
-        bin[0] = 1
+        bin_rep[n - 1] = 1
+        bin_rep[n - 2] = 0
+        bin_rep[n - 3] = 0
+        bin_rep[0] = 1
     ans = 0
-    for i in range(n):
-        ans += bin[i] * (1 << i)
+    for v in range(n):
+        ans += bin_rep[v] * (1 << v)
     return ans
 
 
-
-def countsetbits(n):
+def countsetbits(k):
     count = 0
-    while n:
-        n &= (n - 1)
+    while k:
+        k &= (k - 1)
         count += 1
     return count
 
@@ -74,13 +73,13 @@ def countsetbits(n):
 # This code is contributed by
 # Smitha Dinesh Semwal
 
-def nth_sparse(n):
-    if n == 1:
+def nth_sparse(p):
+    if p == 1:
         return 3
     count = 1
     num = 3
-    while count < n:
-        num = nextSparse(num)  #
+    while count < p:
+        num = nextsparse(num)  #
         if is_sparse(num):
             count += 1
     return num % 35184372089371
@@ -120,4 +119,3 @@ result = []
 for i in data:
     result.append(nth_sparse(i))
 print(*result, sep='\n')
-
