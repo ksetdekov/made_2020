@@ -16,14 +16,14 @@ def nextsparse(x):
     # There my be extra bit in result,
     # so add one extra bit
     bin_rep.append(0)
-    n = len(bin_rep)  # Size of binary representation
+    position = len(bin_rep)  # Size of binary representation
 
     # The position till which all
     # bits are finalized
     changes = 0
 
     # Start from second bit (next to LSB)
-    for m in range(0, n - 2):
+    for m in range(0, position - 2):
 
         # If current bit and its previous
         # bit are 1, but next bit is not 1.
@@ -48,12 +48,12 @@ def nextsparse(x):
     # Find decimal equivalent
     # of modified bin[]
     if changes == 0:
-        bin_rep[n - 1] = 1
-        bin_rep[n - 2] = 0
-        bin_rep[n - 3] = 0
+        bin_rep[position - 1] = 1
+        bin_rep[position - 2] = 0
+        bin_rep[position - 3] = 0
         bin_rep[0] = 1
     ans = 0
-    for v in range(n):
+    for v in range(position):
         ans += bin_rep[v] * (1 << v)
     return ans
 
