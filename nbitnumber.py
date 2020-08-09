@@ -114,18 +114,17 @@ def is_sparse(num):
 #     #     result.append(12)
 #     # print(*result, sep='\n')
 
+while True:
+    n = int(input())
+    a = []
 
-n = int(input())
-a = []
+    for i in range(n):
+        a.append(int(input()))
+    # print(a)
 
-for i in range(n):
-    a.append(int(input()))
-# print(a)
-
-
-data = a
-# print(data)
-result = []
-for i in data:
-    result.append(nth_sparse(i))
-print(*result, sep='\n')
+    data = a
+    # print(data)
+    result = []
+    for i in data:
+        result.append(nth_sparse(i))
+    print(*result, sep='\n')
