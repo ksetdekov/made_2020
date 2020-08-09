@@ -35,4 +35,31 @@ def is_sparse(num):
     else:
         return False
 
-print(nth_sparse(7))
+
+# print(nth_sparse(7))
+
+# while True:
+#     data = input('input')
+#     count = int(data[0])
+#     # result = []
+#     # count = int(data[0])
+#     # for i in range(0, count):
+#     #     # print(i)
+#     #     result.append(12)
+#     # print(*result, sep='\n')
+
+
+lines = []
+line = input('First line: ')
+counter = int(line)
+while counter > 0:
+    line = int(input('Next line: '))
+    lines.append(line)
+    counter -= 1
+# print(lines)
+data = lines
+# print(data)
+result = []
+for i in data:
+    result.append(nth_sparse(i))
+print(*result, sep='\n')
