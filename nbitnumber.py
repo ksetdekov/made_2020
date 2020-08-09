@@ -92,7 +92,7 @@ def nth_sparse(p):
         num = nextsparse(num)  #
         if is_sparse(num):
             count += 1
-    return num % 35184372089371
+    return num
 
 
 def is_sparse(num):
@@ -126,5 +126,5 @@ while True:
     # print(data)
     result = []
     for i in data:
-        result.append(nth_sparse(i))
+        result.append(nth_sparse(i) % 35184372089371)
     print(*result, sep='\n')
