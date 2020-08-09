@@ -54,14 +54,8 @@ train <- cbind(train,Y)
 library(ISLR)
 library(ggplot2)
 library(caret)
-```
 
-```
-## Loading required package: lattice
-```
-
-```r
-inTrain <- createDataPartition(train$Y, p=0.7, list = FALSE)
+inTrain <- createDataPartition(train$Y, p=0.95, list = FALSE)
 training <- train[inTrain,]
 testing <- train[-inTrain,]
 ```
@@ -70,79 +64,7 @@ testing <- train[-inTrain,]
 
 ```r
 library(party)
-```
-
-```
-## Loading required package: grid
-```
-
-```
-## Loading required package: mvtnorm
-```
-
-```
-## Loading required package: modeltools
-```
-
-```
-## Loading required package: stats4
-```
-
-```
-## Loading required package: strucchange
-```
-
-```
-## Loading required package: zoo
-```
-
-```
-## 
-## Attaching package: 'zoo'
-```
-
-```
-## The following objects are masked from 'package:base':
-## 
-##     as.Date, as.Date.numeric
-```
-
-```
-## Loading required package: sandwich
-```
-
-```r
 require(randomForest)
-```
-
-```
-## Loading required package: randomForest
-```
-
-```
-## Warning: package 'randomForest' was built under R version 3.6.2
-```
-
-```
-## randomForest 4.6-14
-```
-
-```
-## Type rfNews() to see new features/changes/bug fixes.
-```
-
-```
-## 
-## Attaching package: 'randomForest'
-```
-
-```
-## The following object is masked from 'package:ggplot2':
-## 
-##     margin
-```
-
-```r
 mod1 <- train(Y ~., method ="glm", data = training)
 ```
 
@@ -376,7 +298,7 @@ mod1 <- train(Y ~., method ="glm", data = training)
 ```
 
 ```r
-mod2 <- train(Y~., method ="rf", data = training, trControl = trainControl(method = "cv"),number = 3)
+mod2 <- train(Y~., method ="rf", data = training, trControl = trainControl(method = "cv"),number = 10)
 mod3 <- train(Y~., method ="rpart", data = training)
 mod4 <- train(Y~., method ="ctree", data = training)
 # mod5 <- mob(Y~., data = training)
@@ -397,7 +319,14 @@ pred1 <- predict(mod1, testing)
 pred2 <- predict(mod2, testing)
 pred3 <- predict(mod3, testing)
 pred4 <- predict(mod4, testing)
+MLmetrics::Accuracy(pred2,testing$Y)
+```
 
+```
+## [1] 1
+```
+
+```r
 confusionMatrix(pred1,testing$Y)
 ```
 
@@ -405,27 +334,27 @@ confusionMatrix(pred1,testing$Y)
 ## Confusion Matrix and Statistics
 ## 
 ##           Reference
-## Prediction    1    0
-##          1 1515    0
-##          0    0 1484
+## Prediction   1   0
+##          1 252   0
+##          0   0 247
 ##                                      
 ##                Accuracy : 1          
-##                  95% CI : (0.9988, 1)
-##     No Information Rate : 0.5052     
+##                  95% CI : (0.9926, 1)
+##     No Information Rate : 0.505      
 ##     P-Value [Acc > NIR] : < 2.2e-16  
 ##                                      
 ##                   Kappa : 1          
 ##                                      
 ##  Mcnemar's Test P-Value : NA         
 ##                                      
-##             Sensitivity : 1.0000     
-##             Specificity : 1.0000     
-##          Pos Pred Value : 1.0000     
-##          Neg Pred Value : 1.0000     
-##              Prevalence : 0.5052     
-##          Detection Rate : 0.5052     
-##    Detection Prevalence : 0.5052     
-##       Balanced Accuracy : 1.0000     
+##             Sensitivity : 1.000      
+##             Specificity : 1.000      
+##          Pos Pred Value : 1.000      
+##          Neg Pred Value : 1.000      
+##              Prevalence : 0.505      
+##          Detection Rate : 0.505      
+##    Detection Prevalence : 0.505      
+##       Balanced Accuracy : 1.000      
 ##                                      
 ##        'Positive' Class : 1          
 ## 
@@ -439,27 +368,27 @@ confusionMatrix(pred2,testing$Y)
 ## Confusion Matrix and Statistics
 ## 
 ##           Reference
-## Prediction    1    0
-##          1 1515    0
-##          0    0 1484
+## Prediction   1   0
+##          1 252   0
+##          0   0 247
 ##                                      
 ##                Accuracy : 1          
-##                  95% CI : (0.9988, 1)
-##     No Information Rate : 0.5052     
+##                  95% CI : (0.9926, 1)
+##     No Information Rate : 0.505      
 ##     P-Value [Acc > NIR] : < 2.2e-16  
 ##                                      
 ##                   Kappa : 1          
 ##                                      
 ##  Mcnemar's Test P-Value : NA         
 ##                                      
-##             Sensitivity : 1.0000     
-##             Specificity : 1.0000     
-##          Pos Pred Value : 1.0000     
-##          Neg Pred Value : 1.0000     
-##              Prevalence : 0.5052     
-##          Detection Rate : 0.5052     
-##    Detection Prevalence : 0.5052     
-##       Balanced Accuracy : 1.0000     
+##             Sensitivity : 1.000      
+##             Specificity : 1.000      
+##          Pos Pred Value : 1.000      
+##          Neg Pred Value : 1.000      
+##              Prevalence : 0.505      
+##          Detection Rate : 0.505      
+##    Detection Prevalence : 0.505      
+##       Balanced Accuracy : 1.000      
 ##                                      
 ##        'Positive' Class : 1          
 ## 
@@ -473,27 +402,27 @@ confusionMatrix(pred3,testing$Y)
 ## Confusion Matrix and Statistics
 ## 
 ##           Reference
-## Prediction    1    0
-##          1 1515    0
-##          0    0 1484
+## Prediction   1   0
+##          1 252   0
+##          0   0 247
 ##                                      
 ##                Accuracy : 1          
-##                  95% CI : (0.9988, 1)
-##     No Information Rate : 0.5052     
+##                  95% CI : (0.9926, 1)
+##     No Information Rate : 0.505      
 ##     P-Value [Acc > NIR] : < 2.2e-16  
 ##                                      
 ##                   Kappa : 1          
 ##                                      
 ##  Mcnemar's Test P-Value : NA         
 ##                                      
-##             Sensitivity : 1.0000     
-##             Specificity : 1.0000     
-##          Pos Pred Value : 1.0000     
-##          Neg Pred Value : 1.0000     
-##              Prevalence : 0.5052     
-##          Detection Rate : 0.5052     
-##    Detection Prevalence : 0.5052     
-##       Balanced Accuracy : 1.0000     
+##             Sensitivity : 1.000      
+##             Specificity : 1.000      
+##          Pos Pred Value : 1.000      
+##          Neg Pred Value : 1.000      
+##              Prevalence : 0.505      
+##          Detection Rate : 0.505      
+##    Detection Prevalence : 0.505      
+##       Balanced Accuracy : 1.000      
 ##                                      
 ##        'Positive' Class : 1          
 ## 
@@ -507,27 +436,27 @@ confusionMatrix(pred4,testing$Y)
 ## Confusion Matrix and Statistics
 ## 
 ##           Reference
-## Prediction    1    0
-##          1 1515    0
-##          0    0 1484
+## Prediction   1   0
+##          1 252   0
+##          0   0 247
 ##                                      
 ##                Accuracy : 1          
-##                  95% CI : (0.9988, 1)
-##     No Information Rate : 0.5052     
+##                  95% CI : (0.9926, 1)
+##     No Information Rate : 0.505      
 ##     P-Value [Acc > NIR] : < 2.2e-16  
 ##                                      
 ##                   Kappa : 1          
 ##                                      
 ##  Mcnemar's Test P-Value : NA         
 ##                                      
-##             Sensitivity : 1.0000     
-##             Specificity : 1.0000     
-##          Pos Pred Value : 1.0000     
-##          Neg Pred Value : 1.0000     
-##              Prevalence : 0.5052     
-##          Detection Rate : 0.5052     
-##    Detection Prevalence : 0.5052     
-##       Balanced Accuracy : 1.0000     
+##             Sensitivity : 1.000      
+##             Specificity : 1.000      
+##          Pos Pred Value : 1.000      
+##          Neg Pred Value : 1.000      
+##              Prevalence : 0.505      
+##          Detection Rate : 0.505      
+##    Detection Prevalence : 0.505      
+##       Balanced Accuracy : 1.000      
 ##                                      
 ##        'Positive' Class : 1          
 ## 
@@ -541,30 +470,6 @@ qplot(pred1,Y, data = testing)
 
 ```r
 library(rattle)
-```
-
-```
-## Warning: package 'rattle' was built under R version 3.6.2
-```
-
-```
-## Rattle: A free graphical interface for data science with R.
-## Version 5.3.0 Copyright (c) 2006-2018 Togaware Pty Ltd.
-## Type 'rattle()' to shake, rattle, and roll your data.
-```
-
-```
-## 
-## Attaching package: 'rattle'
-```
-
-```
-## The following object is masked from 'package:randomForest':
-## 
-##     importance
-```
-
-```r
 fancyRpartPlot(mod3$finalModel)
 ```
 
@@ -669,12 +574,13 @@ predVDF4 <-
     )
 combPredV5 <- predict(combModFit4,predVDF4,type="prob")
 View(combPredV5)
+rfresults <- predict(mod2, test,type="prob")
 ```
 
 ## export
 
 ```r
-export <- combPredV5[,1]
+export <- rfresults[,1]
 write.table(export, file = "results.csv",row.names = FALSE, dec = ".", sep = ",", col.names = F)
 ```
 

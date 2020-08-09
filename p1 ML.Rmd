@@ -32,7 +32,7 @@ library(ISLR)
 library(ggplot2)
 library(caret)
 
-inTrain <- createDataPartition(train$Y, p=0.7, list = FALSE)
+inTrain <- createDataPartition(train$Y, p=0.95, list = FALSE)
 training <- train[inTrain,]
 testing <- train[-inTrain,]
 ```
@@ -42,7 +42,7 @@ testing <- train[-inTrain,]
 library(party)
 require(randomForest)
 mod1 <- train(Y ~., method ="glm", data = training)
-mod2 <- train(Y~., method ="rf", data = training, trControl = trainControl(method = "cv"),number = 3)
+mod2 <- train(Y~., method ="rf", data = training, trControl = trainControl(method = "cv"),number = 10)
 mod3 <- train(Y~., method ="rpart", data = training)
 mod4 <- train(Y~., method ="ctree", data = training)
 # mod5 <- mob(Y~., data = training)
