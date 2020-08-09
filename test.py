@@ -59,7 +59,7 @@ def nextSparse(x):
 
 # Driver Code
 if __name__ == '__main__':
-    x = 12
+    x = 9
     print("Next Sparse Number is", nextSparse(x))
     print("{0:b}".format(3))
     print("{0:b}".format(5))
