@@ -98,8 +98,11 @@ predVDF4 <-
         pred4 = pred4V
     )
 combPredV5 <- predict(combModFit4,predVDF4,type="prob")
-View(combPredV5)
+# View(combPredV5)
 rfresults <- predict(mod2, test,type="prob")
+glm_results <- predict(mod1, test,type="prob" )
+
+View(glm_results)
 
 ```
 

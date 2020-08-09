@@ -107,3 +107,5 @@ dmypy.json
 .Rproj.user
 p1-ML_cache
 p1-ML.html
+/.RData
+/.Rhistory
