@@ -26,7 +26,7 @@ def nth_sparse(n):
         num += 1  #
         if is_sparse(num):
             count += 1
-    return num
+    return num % 35184372089371
 
 
 def is_sparse(num):
@@ -35,4 +35,4 @@ def is_sparse(num):
     else:
         return False
 
-print(nth_sparse(10000))
+print(nth_sparse(7))
