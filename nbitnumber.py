@@ -49,17 +49,19 @@ def is_sparse(num):
 #     # print(*result, sep='\n')
 
 
-lines = []
-line = input('First line: ')
-counter = int(line)
-while counter > 0:
-    line = int(input('Next line: '))
-    lines.append(line)
-    counter -= 1
-# print(lines)
-data = lines
+n = int(input())
+a = []
+
+for i in range(n):
+    a.append(int(input()))
+# print(a)
+
+
+data = a
 # print(data)
 result = []
 for i in data:
     result.append(nth_sparse(i))
 print(*result, sep='\n')
+
+
