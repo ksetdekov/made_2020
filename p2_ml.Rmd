@@ -1,0 +1,32 @@
+---
+title: "classification"
+author: "Kirill Setdekov"
+date: "09 08 2020"
+output:
+  html_document:
+    keep_md: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	cache = TRUE
+)
+```
+
+## import
+```{r}
+library(readr)
+train <- read_csv("data_2/train.csv", col_types = cols(like = col_factor()))
+item_features <- read_csv("data_2/item-features.csv")
+
+# View(train)
+test <- read_csv("data_2/test.csv")
+user_features <- read_csv("data_2/user-features.csv")
+sample_submission <- read_csv("data_2/sample-submission.csv")
+```
+## simple count which id is most liked
+```{r}
+library(dplyr)
+train %>% select()
+```
+
