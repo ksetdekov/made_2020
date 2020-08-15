@@ -32,20 +32,61 @@ library(ISLR)
 library(ggplot2)
 library(caret)
 
-inTrain <- createDataPartition(train$Y, p=0.95, list = FALSE)
+inTrain <- createDataPartition(train$Y, p=0.7, list = FALSE)
 training <- train[inTrain,]
 testing <- train[-inTrain,]
 ```
+# exploratory
+```{r}
+library(dplyr)
+violin_pair <- function(column) {
+  print(ggplot(testing, aes(x=Y, y=testing[,column]))+   geom_violin() + ylab(column))
+}
+
+for (i in names(testing)[1:30]){
+  violin_pair(i)
+}
+
+
+library(ggplot2)
+library(GGally)
+ggpairs(training[,c(1:10,31)])
+
+
+library("Hmisc")
+res2 <- rcorr(as.matrix(testing))
+
+flattenCorrMatrix <- function(cormat, pmat) {
+  ut <- upper.tri(cormat)
+  data.frame(
+    row = rownames(cormat)[row(cormat)[ut]],
+    column = rownames(cormat)[col(cormat)[ut]],
+    cor  =(cormat)[ut],
+    p = pmat[ut]
+    )
+}
+View(flattenCorrMatrix(res2$r, res2$P))
+library(corrplot)
+res <- cor(as.matrix(cbind(testing[,1:30],as.numeric(testing[,31]))))
+
+corrplot(res, type = "upper", order = "hclust", 
+         tl.col = "black", tl.srt = 45)
+corrplot(res2$r, type="upper", order="hclust", 
+         p.mat = res2$P, sig.level = 0.01, insig = "blank")
+```
+
 
 # ensemble
 ```{r}
 library(party)
 require(randomForest)
-mod1 <- train(Y ~., method ="glm", data = training)
-mod2 <- train(Y~., method ="rf", data = training, trControl = trainControl(method = "cv"),number = 10)
-mod3 <- train(Y~., method ="rpart", data = training)
-mod4 <- train(Y~., method ="ctree", data = training)
-# mod5 <- mob(Y~., data = training)
+mod1 <- train(Y ~., method ="glm", data = training[,-c(1, 6, 8, 10, 18, 20, 22)])
+mod2 <- train(Y~., method ="rf", data = training[,-c(1, 6, 8, 10, 18, 20, 22)], trControl = trainControl(method = "cv"),number = 10)
+mod3 <- train(Y~., method ="rpart", data = training[,-c(1, 6, 8, 10, 18, 20, 22)])
+mod4 <- train(Y~., method ="ctree", data = training[,-c(1, 6, 8, 10, 18, 20, 22)])
+# mod4 <- train(Y~., method ="ctree", data = training[,-10])
+
+mod5 <- train(Y~.,method = "ada", data = training[,-c(1, 6, 8, 10, 18, 20, 22)])
 ```
 
 ### compare them
@@ -54,7 +95,7 @@ pred1 <- predict(mod1, testing)
 pred2 <- predict(mod2, testing)
 pred3 <- predict(mod3, testing)
 pred4 <- predict(mod4, testing)
-MLmetrics::Accuracy(pred2,testing$Y)
+MLmetrics::Accuracy(pred4,testing$Y)
 
 confusionMatrix(pred1,testing$Y)
 confusionMatrix(pred2,testing$Y)
@@ -63,10 +104,10 @@ confusionMatrix(pred3,testing$Y)
 
 confusionMatrix(pred4,testing$Y)
 
-qplot(pred1,Y, data = testing)
 library(rattle)
 fancyRpartPlot(mod3$finalModel)
 plot(mod4$finalModel)
+plot(mod1$finalModel)
 ```
 
 
@@ -100,6 +141,7 @@ predVDF4 <-
 combPredV5 <- predict(combModFit4,predVDF4,type="prob")
 # View(combPredV5)
 rfresults <- predict(mod2, test,type="prob")
+ctreeresults <- predict(mod4, test,type="prob")
 glm_results <- predict(mod1, test,type="prob" )
 
 View(glm_results)
@@ -108,7 +150,7 @@ View(glm_results)
 
 ## export
 ```{r}
-export <- rfresults[,1]
+export <- combPredV5[,1]
 write.table(export, file = "results.csv",row.names = FALSE, dec = ".", sep = ",", col.names = F)
 ```
 
