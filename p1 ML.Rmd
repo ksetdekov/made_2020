@@ -36,6 +36,14 @@ inTrain <- createDataPartition(train$Y, p=0.95, list = FALSE)
 training <- train[inTrain,]
 testing <- train[-inTrain,]
 ```
+# exploratory
+```{r}
+library(ggplot2)
+library(GGally)
+ggpairs(training)
+
+```
+
 
 # ensemble
 ```{r}
