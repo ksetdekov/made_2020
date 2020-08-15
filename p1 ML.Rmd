@@ -32,7 +32,7 @@ library(ISLR)
 library(ggplot2)
 library(caret)
 
-inTrain <- createDataPartition(train$Y, p=0.95, list = FALSE)
+inTrain <- createDataPartition(train$Y, p=0.7, list = FALSE)
 training <- train[inTrain,]
 testing <- train[-inTrain,]
 ```
@@ -50,8 +50,29 @@ for (i in names(testing)[1:30]){
 
 library(ggplot2)
 library(GGally)
-# ggpairs(training)
+ggpairs(training[,c(1:10,31)])
 
+
+library("Hmisc")
+res2 <- rcorr(as.matrix(testing))
+
+flattenCorrMatrix <- function(cormat, pmat) {
+  ut <- upper.tri(cormat)
+  data.frame(
+    row = rownames(cormat)[row(cormat)[ut]],
+    column = rownames(cormat)[col(cormat)[ut]],
+    cor  =(cormat)[ut],
+    p = pmat[ut]
+    )
+}
+View(flattenCorrMatrix(res2$r, res2$P))
+library(corrplot)
+res <- cor(as.matrix(cbind(testing[,1:30],as.numeric(testing[,31]))))
+
+corrplot(res, type = "upper", order = "hclust", 
+         tl.col = "black", tl.srt = 45)
+corrplot(res2$r, type="upper", order="hclust", 
+         p.mat = res2$P, sig.level = 0.01, insig = "blank")
 ```
 
 
@@ -59,11 +80,11 @@ library(GGally)
 ```{r}
 library(party)
 require(randomForest)
-mod1 <- train(Y ~., method ="glm", data = training[,-10])
-mod2 <- train(Y~., method ="rf", data = training, trControl = trainControl(method = "cv"),number = 10)
-mod3 <- train(Y~., method ="rpart", data = training)
-# mod4 <- train(Y~X27+X16+X9+X17, method ="ctree", data = training)
-mod4 <- train(Y~., method ="ctree", data = training[,-10])
+mod1 <- train(Y ~., method ="glm", data = training[,-c(1, 6, 8, 10, 18, 20, 22)])
+mod2 <- train(Y~., method ="rf", data = training[,-c(1, 6, 8, 10, 18, 20, 22)], trControl = trainControl(method = "cv"),number = 10)
+mod3 <- train(Y~., method ="rpart", data = training[,-c(1, 6, 8, 10, 18, 20, 22)])
+mod4 <- train(Y~., method ="ctree", data = training[,-c(1, 6, 8, 10, 18, 20, 22)])
+# mod4 <- train(Y~., method ="ctree", data = training[,-10])
 
 # mod5 <- mob(Y~., data = training)
 ```
@@ -83,10 +104,10 @@ confusionMatrix(pred3,testing$Y)
 
 confusionMatrix(pred4,testing$Y)
 
-qplot(pred4,Y, data = testing)
 library(rattle)
 fancyRpartPlot(mod3$finalModel)
 plot(mod4$finalModel)
+plot(mod1$finalModel)
 ```
 
 
@@ -129,7 +150,7 @@ View(glm_results)
 
 ## export
 ```{r}
-export <- ctreeresults[,1]
+export <- combPredV5[,1]
 write.table(export, file = "results.csv",row.names = FALSE, dec = ".", sep = ",", col.names = F)
 ```
 
