@@ -86,7 +86,7 @@ mod3 <- train(Y~., method ="rpart", data = training[,-c(1, 6, 8, 10, 18, 20, 22)
 mod4 <- train(Y~., method ="ctree", data = training[,-c(1, 6, 8, 10, 18, 20, 22)])
 # mod4 <- train(Y~., method ="ctree", data = training[,-10])
 
-# mod5 <- mob(Y~., data = training)
+mod5 <- train(Y~.,method = "ada", data = training[,-c(1, 6, 8, 10, 18, 20, 22)])
 ```
 
 ### compare them
