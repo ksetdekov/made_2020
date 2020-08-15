@@ -38,9 +38,19 @@ testing <- train[-inTrain,]
 ```
 # exploratory
 ```{r}
+library(dplyr)
+violin_pair <- function(column) {
+  print(ggplot(testing, aes(x=Y, y=testing[,column]))+   geom_violin() + ylab(column))
+}
+
+for (i in names(testing)[1:30]){
+  violin_pair(i)
+}
+
+
 library(ggplot2)
 library(GGally)
-ggpairs(training)
+# ggpairs(training)
 
 ```
 
@@ -49,10 +59,12 @@ ggpairs(training)
 ```{r}
 library(party)
 require(randomForest)
-mod1 <- train(Y ~., method ="glm", data = training)
+mod1 <- train(Y ~., method ="glm", data = training[,-10])
 mod2 <- train(Y~., method ="rf", data = training, trControl = trainControl(method = "cv"),number = 10)
 mod3 <- train(Y~., method ="rpart", data = training)
-mod4 <- train(Y~., method ="ctree", data = training)
+# mod4 <- train(Y~X27+X16+X9+X17, method ="ctree", data = training)
+mod4 <- train(Y~., method ="ctree", data = training[,-10])
+
 # mod5 <- mob(Y~., data = training)
 ```
 
@@ -62,7 +74,7 @@ pred1 <- predict(mod1, testing)
 pred2 <- predict(mod2, testing)
 pred3 <- predict(mod3, testing)
 pred4 <- predict(mod4, testing)
-MLmetrics::Accuracy(pred2,testing$Y)
+MLmetrics::Accuracy(pred4,testing$Y)
 
 confusionMatrix(pred1,testing$Y)
 confusionMatrix(pred2,testing$Y)
@@ -71,7 +83,7 @@ confusionMatrix(pred3,testing$Y)
 
 confusionMatrix(pred4,testing$Y)
 
-qplot(pred1,Y, data = testing)
+qplot(pred4,Y, data = testing)
 library(rattle)
 fancyRpartPlot(mod3$finalModel)
 plot(mod4$finalModel)
@@ -108,6 +120,7 @@ predVDF4 <-
 combPredV5 <- predict(combModFit4,predVDF4,type="prob")
 # View(combPredV5)
 rfresults <- predict(mod2, test,type="prob")
+ctreeresults <- predict(mod4, test,type="prob")
 glm_results <- predict(mod1, test,type="prob" )
 
 View(glm_results)
@@ -116,7 +129,7 @@ View(glm_results)
 
 ## export
 ```{r}
-export <- rfresults[,1]
+export <- ctreeresults[,1]
 write.table(export, file = "results.csv",row.names = FALSE, dec = ".", sep = ",", col.names = F)
 ```
 
