@@ -192,6 +192,7 @@ View(ada_res)
 ## export
 ```{r}
 export <- combPredV5[,1]
+export <- ada_res[,2]
 write.table(export, file = "results.csv",row.names = FALSE, dec = ".", sep = ",", col.names = F)
 ```
 
