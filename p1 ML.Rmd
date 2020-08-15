@@ -91,10 +91,10 @@ xyplot(X2 ~ X16,
        auto.key = list(columns = 2)) 
 ```
 ```{r preprocessing}
-pp <- preProcess(training[,-c(1, 6, 8, 18, 20, 22)], 
+pp <- preProcess(training, 
                      method="pca", pcaComp=20)
 pp
-transformed <- predict(pp, newdata = training[,-c(1, 6, 8, 18, 20, 22)])
+transformed <- predict(pp, newdata = training)
 head(transformed)
 ggpairs(transformed[,1:10])
 ```
@@ -117,7 +117,7 @@ mod5 <- ada(Y~.,data=transformed,iter=1000,nu=1,type="discrete")
 
 ### compare them
 ```{r dependson=c(-1)}
-transform_testing  <- predict(pp, newdata = testing[,-c(1, 6, 8, 18, 20, 22)])
+transform_testing  <- predict(pp, newdata = testing)
 
 pred1 <- predict(mod1, transform_testing)
 pred2 <- predict(mod2, transform_testing)
@@ -162,7 +162,7 @@ plot(combModFit4)
 ```
 
 ```{r}
-trans_test  <- predict(pp, newdata = test[,-c(1, 6, 8, 18, 20, 22)])
+trans_test  <- predict(pp, newdata = test)
 
 pred1V <- predict(mod1, trans_test)
 pred2V <- predict(mod2, trans_test)
@@ -192,7 +192,9 @@ View(ada_res)
 ## export
 ```{r}
 export <- combPredV5[,1]
-export <- ada_res[,2]
 write.table(export, file = "results.csv",row.names = FALSE, dec = ".", sep = ",", col.names = F)
+export <- ada_res[,2]
+write.table(export, file = "ada_results.csv",row.names = FALSE, dec = ".", sep = ",", col.names = F)
+
 ```
 
