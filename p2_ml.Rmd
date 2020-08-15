@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 ```
 
 ## import
-```{r}
+```{r import, message=TRUE, warning=TRUE, include=FALSE}
 library(readr)
 train <- read_csv("data_2/train.csv", col_types = cols(like = col_factor()))
 item_features <- read_csv("data_2/item-features.csv")
@@ -27,6 +27,29 @@ sample_submission <- read_csv("data_2/sample-submission.csv")
 ## simple count which id is most liked
 ```{r}
 library(dplyr)
-train %>% select()
+count_occ <- train %>% select(user_id, item_id, like) %>% group_by(item_id) %>% summarize(pct.like = mean(like == "1"), n=n(), lowconf = qbinom(0.05,n,pct.like)/n)  %>% select(n) 
+hist(count_occ$n)
+summary(count_occ$n)
+
+top20 <- train %>% select(user_id, item_id, like) %>% group_by(item_id) %>% summarize(pct.like = mean(like == "1"), n=n(), lowconf = qbinom(0.05,n,pct.like)/n)  %>% filter(((n > 6) & (pct.like ==1 )) | pct.like <1) %>% arrange( desc(lowconf)) %>% head(20)
+```
+
+# get numbers to rows
+```{r}
+# first remember the names
+rownames(top20) <- 0:19
+n <- rownames(top20)
+
+# transpose all but the first column (name)
+suggestions <- as.data.frame(t(top20[,1]))
+colnames(suggestions) <- n
+
+```
+
+```{r output}
+results <- test[,1]
+results <- cbind(results, suggestions)
+write.table(results, file = "results_p2.csv",row.names = FALSE, dec = ".", sep = ",")
+
 ```
 
