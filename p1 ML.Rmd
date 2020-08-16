@@ -91,10 +91,10 @@ xyplot(X2 ~ X16,
        auto.key = list(columns = 2)) 
 ```
 ```{r preprocessing}
-pp <- preProcess(training, 
+pp <- preProcess(training[,-10], 
                      method="pca", pcaComp=20)
 pp
-transformed <- predict(pp, newdata = training)
+transformed <- predict(pp, newdata = training[,-10])
 head(transformed)
 ggpairs(transformed[,1:10])
 ```
