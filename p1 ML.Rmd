@@ -92,7 +92,7 @@ xyplot(X2 ~ X16,
 ```
 ```{r preprocessing}
 pp <- preProcess(training[,-10], 
-                     method="pca", pcaComp=20)
+                     method="pca", pcaComp=15)
 pp
 transformed <- predict(pp, newdata = training[,-10])
 head(transformed)

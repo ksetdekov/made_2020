@@ -1,0 +1,13 @@
+base
+readr
+ISLR
+ggplot2
+lattice
+caret
+dplyr
+GGally
+survival
+Formula
+Hmisc
+corrplot
+AppliedPredictiveModeling
